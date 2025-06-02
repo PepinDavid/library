@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  library-psql:
+    hostname: ${POSTGRES_HOSTNAME}
+    container_name: ${POSTGRES_NAME}
+    restart: always
+    build:
+      context: ./library-psql
+      dockerfile: Dockerfile
+      args:
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_PORT: ${POSTGRES_PORT}
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - library_postgres_data:/var/lib/postgresql/data
+
+  library-service:
+    hostname: ${LIBRARY_SERVICE_HOSTNAME}
+    container_name: ${LIBRARY_SERVICE_NAME}
+    build:
+      context: ./library-service
+      dockerfile: Dockerfile
+      args:
+        DB_HOST: ${POSTGRES_NAME}
+        DB_PORT: ${POSTGRES_PORT}
+        DB_USER: ${POSTGRES_USER}
+        DB_PASSWORD: ${POSTGRES_PASSWORD}
+        DB_NAME: ${POSTGRES_DB}
+        SERVER_PORT: ${SERVER_PORT}
+        JWT_SECRET: ${JWT_SECRET}
+        JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+        TARGET: ${TARGET}
+    depends_on:
+      - library-psql
+    environment:
+      - DB_HOST=${POSTGRES_NAME}
+      - DB_PORT=${POSTGRES_PORT}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${POSTGRES_DB}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
+      - JWT_SECRET=${JWT_SECRET}
+      - TARGET=${TARGET}
+      - SERVER_PORT=${SERVER_PORT}
+    
+volumes:
+  library_postgres_data:

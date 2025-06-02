@@ -1,0 +1,38 @@
+# postgres-service
+export POSTGRES_HOSTNAME=library-psql
+export POSTGRES_NAME=library-psql
+export POSTGRES_USER=postuser
+export POSTGRES_PASSWORD=postpassword
+export POSTGRES_DB=library_service
+export POSTGRES_PORT=5432
+
+# library-service
+export LIBRARY_SERVICE_HOSTNAME=library-service
+export LIBRARY_SERVICE_NAME=library-service
+export JWT_SECRET=your_very_secure_secret
+export JWT_EXPIRES_IN=7200
+export DB_STORAGE=:memory:
+export SERVER_PORT=3000
+export TARGET=docker
+
+# rabbit-mq
+export RABBITMQ_NAME=rabbitmq-library
+export RABBITMQ_HOSTNAME=rabbitmq-library
+export RABBITMQ_AMQP_PORT=5672
+export RABBITMQ_HTTP_PORT=15672
+export RABBITMQ_USER=admin
+export RABBITMQ_PASSWORD=rabbitpassword
+export RABBITMQ_URL="amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_HOSTNAME}:${RABBITMQ_AMQP_PORT}"
+
+# analytics-mongo
+export MONGO_NAME=analytics-mongo
+export MONGO_HOSTNAME=analytics-mongo
+export MONGO_USERNAME=mongo_admin
+export MONGO_PASSWORD=mongo_password
+export MONGO_DATABASE=analytics
+export MONGO_PORT=27017
+
+# analytics-service
+export ANALYTICS_NAME=analytics-service
+export ANALYTICS_HOSTNAME=analytics-service
+export MONGODB_URI="mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin"
